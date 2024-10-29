@@ -53,7 +53,7 @@ export class OakGenerator {
         }
         this._sdkFunctions = new Set()
         this.embeddedFunctions = {
-            'parseFloat': new ParseFloat('parseFloat'),
+            'parsefloat': new ParseFloat('parseFloat'),
             'parseInt': new ParseInt('parseInt')
         }
     }

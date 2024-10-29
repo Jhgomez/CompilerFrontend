@@ -631,11 +631,11 @@ export class OakGenerator {
                 const falseBranch = this.getLabel()
                 const endLabel = this.getLabel()
                 this.beqz(R.A0, falseBranch)
-                this.addi(R.S7, R.SP, -trueString.offset)
+                this.addi(R.S7, R.SP, trueString.offset)
                 this.lw(R.A0, R.S7)
                 this.j(endLabel)
                 this.addLabel(falseBranch)
-                this.addi(R.S7, R.SP, -falseString.offset)
+                this.addi(R.S7, R.SP, falseString.offset)
                 this.lw(R.A0, R.S7)
                 this.addLabel(endLabel)
                 this.li(R.A7, 4)
@@ -832,7 +832,10 @@ export class OakGenerator {
 
         const trueUnicodeVals = breakStringIntoCharUnicodeArray('true')
 
+        this.comment('true')
         this.mv(R.A0, R.HP)
+        this.addi(R.SP, R.SP, -4)
+        this.sw(R.A0, R.SP)
 
         trueUnicodeVals.forEach( charBits => {
             // load char bits integer representation into t1
@@ -846,9 +849,14 @@ export class OakGenerator {
         })
 
         this.pushToMimic(trueVar)
-
         this.addi(R.HP, R.HP, 3)
 
+        this.mv(R.A0, R.HP)
+        this.addi(R.SP, R.SP, -4)
+        this.sw(R.A0, R.SP)
+        this.space()
+
+        this.comment('false')
         const falseUnicodeVals = breakStringIntoCharUnicodeArray('false')
 
         this.mv(R.A0, R.HP)

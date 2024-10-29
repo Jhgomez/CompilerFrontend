@@ -1,3 +1,4 @@
+// test
 {
   const createNode = (nodeType, properties) => {
     const types = {

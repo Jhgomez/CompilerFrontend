@@ -22,7 +22,14 @@ string is located and then we know the string ends where we find the first 0 whi
 process is done with floating point numbers, we take the floating point number and store it inside a JavaScript typed array, but I have
 two types arrays working with the same buffer these two types array help mananing/handling binary data in JS and then convert it 
 to a HEX string value wich is what risc-v can understand then store it like a decimal value but after that we can only interact
-with it using floating point instructions. 
+with it using floating point instructions. The idea to be able to manage memory is keep a "stack" which
+is some sort or record stored inside a collection of objects in memory, each record has the info about the object that the value in memory represents, like the type, subtype, level(scope), etc. arrays and methods are the closest thing, in this project, that I built that has the idea of how a class should be
+represented or stored, I mean we have to define where the properties and values will be stored, for example and array is just and address in the stack, but this address points to the first item in the array, however at the time I create an array I always store the lenght of the array as some sort of property in the previous position(4 bytes before) in memory, right before the firtst item of the array, 
+to be able to read info without messing the stack or heap the pointers are always pointing to the top either of the stack or the heap, the stack pointer is provided by the framework but the heap pointer is just a variable I created that holds the value of an empty/available space in memory right after the last
+value that was stored in the heap, the stack pointer behaves differently because "I set it up" this way and that is that the stack pointer is always pointing to the latest value added, so in order to move for example through an array I create temporary pointers, that means I save the addresss of the firts 
+element in a register and then start moving it.
+
+check the entries file to test application.
 
 ## Development environment set up
 

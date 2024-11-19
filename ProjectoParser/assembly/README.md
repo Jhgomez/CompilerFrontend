@@ -33,7 +33,7 @@ generate the instructions that live inside the function, the instrucctions genre
 when a function call is found first thing is write the return address and then save the value of the parameters that are being passed as
 arguments, then we jump and link and the function is executed. and return when it is finished
 
-check the entries file to test application.
+Check the entries files to test application, the generated assembly code can be executed in rars, to do that rars will require you to either open an existing file or create a new one, once you have done this, paste the generated code and "compile" with f3 and run it with f5
 
 ## Development environment set up
 

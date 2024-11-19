@@ -32,7 +32,7 @@ export class VisitorInterpreter extends BaseVisitor {
         this.environment.store('Object', oakObject)
         this.environment.store('System', oakSystem)
         this.environment.store('parseInt', parseInt)
-        this.environment.store('parseFloat', parseFloat)
+        this.environment.store('parsefloat', parseFloat)
         this.environment.store('toString', toString)
         this.environment.store('toLowerCase', toLowerCase)
         this.environment.store('toUpperCase', toUpperCase)
@@ -144,11 +144,11 @@ export class VisitorInterpreter extends BaseVisitor {
     }
 
     visitBreak(node) {
-        throw new OakBreak()
+        throw new OakBreak(node.location)
     }
 
     visitContinue(node) {
-        throw new OakContinue()
+        throw new OakContinue(node.location)
     }
 
     visitReturn(node) {
@@ -830,8 +830,7 @@ export class VisitorInterpreter extends BaseVisitor {
 //   Parenthesis
     visitFunctionCall(node) {
         // 1. check if it a function, 
-        try {
-                
+        try {          
             let func = this.environment.get(node.callee.name)
             if(func instanceof DeclaredFunction) {
                 const result = func.invoke(this, node.args)
@@ -1472,20 +1471,23 @@ export class VisitorInterpreter extends BaseVisitor {
         node.variable?.interpret(this)
 
         let condition = node.condition?.interpret(this)
+        const defaultCondition = new nodes.Literal({type: 'bool', value: true})
 
         if(condition instanceof nodes.Literal && condition?.type == 'bool' || condition == null) {
 
-            if(condition == undefined) condition = true
+            if(condition == undefined) condition = defaultCondition
 
             while(condition.value) {
                 try {
                     node.body?.interpret(this)
                     updateExpression?.interpret(this)
                     condition = node.condition?.interpret(this)
+                    if(condition == undefined) condition = defaultCondition
                 } catch (error) {
                     if(error instanceof OakContinue) {
                         updateExpression?.interpret(this)
                         condition = node.condition?.interpret(this)
+                        if(condition == undefined) condition = defaultCondition
                         continue
                     }
 
@@ -1540,7 +1542,7 @@ export class VisitorInterpreter extends BaseVisitor {
                 try {
                     node.statements.interpret(this)
                     condition = node.condition.interpret(this)   
-                } catch (error) {1   
+                } catch (error) {   
                     
                     if(error instanceof OakContinue) {
                         condition = node.condition.interpret(this)

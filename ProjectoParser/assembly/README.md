@@ -30,8 +30,8 @@ value that was stored in the heap, the stack pointer behaves differently because
 compiling a function is move the generated code to another "buffer", then leave a space in the stack and the mimic to store the the 
 return address and then create the variables that represent the parameters either with an empty space for each or a randon/default value, however be aware a value is always added to the to the mimic of the stack, which again is a collection, then we execute the code just to
 generate the instructions that live inside the function, the instrucctions genreated by a function declaration will be written once only
-when a function call is found first thing is write the return address and then write the value to each parameter, then we jump and link to
-and the function is executed. and return when it is finished
+when a function call is found first thing is write the return address and then save the value of the parameters that are being passed as
+arguments, then we jump and link and the function is executed. and return when it is finished
 
 check the entries file to test application.
 

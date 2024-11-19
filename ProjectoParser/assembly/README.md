@@ -24,10 +24,14 @@ two types arrays working with the same buffer these two types array help mananin
 to a HEX string value wich is what risc-v can understand then store it like a decimal value but after that we can only interact
 with it using floating point instructions. The idea to be able to manage memory is keep a "stack" which
 is some sort or record stored inside a collection of objects in memory, each record has the info about the object that the value in memory represents, like the type, subtype, level(scope), etc. arrays and methods are the closest thing, in this project, that I built that has the idea of how a class should be
-represented or stored, I mean we have to define where the properties and values will be stored, for example and array is just and address in the stack, but this address points to the first item in the array, however at the time I create an array I always store the lenght of the array as some sort of property in the previous position(4 bytes before) in memory, right before the firtst item of the array, 
+represented or stored, I mean we have to define where the properties and values will be stored, for example and array is just and address in the heap that is stored in the stack, this address points to the first item of the array, however at the time I create an array I always store the lenght of the array as some sort of property in the previous position(4 bytes before) in memory, right before the firtst item of the array, 
 to be able to read info without messing the stack or heap the pointers are always pointing to the top either of the stack or the heap, the stack pointer is provided by the framework but the heap pointer is just a variable I created that holds the value of an empty/available space in memory right after the last
-value that was stored in the heap, the stack pointer behaves differently because "I set it up" this way and that is that the stack pointer is always pointing to the latest value added, so in order to move for example through an array I create temporary pointers, that means I save the addresss of the firts 
-element in a register and then start moving it.
+value that was stored in the heap, the stack pointer behaves differently because "I set it up" this way and that is that the stack pointer is always pointing to the latest value added to the stack, so in order to move for example through an array I create temporary pointers, that means I retrieve the array address which is a heap address stored in the stack and copy it into a register and then start moving it, this helps avoid overwriting data in the stack and/or heap. The Functions behave like the following, first thing we do when 
+compiling a function is move the generated code to another "buffer", then leave a space in the stack and the mimic to store the the 
+return address and then create the variables that represent the parameters either with an empty space for each or a randon/default value, however be aware a value is always added to the to the mimic of the stack, which again is a collection, then we execute the code just to
+generate the instructions that live inside the function, the instrucctions genreated by a function declaration will be written once only
+when a function call is found first thing is write the return address and then write the value to each parameter, then we jump and link to
+and the function is executed. and return when it is finished
 
 check the entries file to test application.
 
